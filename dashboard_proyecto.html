@@ -577,12 +577,12 @@ const disciplinas = [
 ];
 
 const hitos = [
-  { nombre: 'Ingeniería Conceptual',       plan: '15 Feb 2025', real: '18 Feb 2025', status: 'warn',   label: 'Leve atraso' },
-  { nombre: 'Aprobación Básica Fase 1',    plan: '31 Mar 2025', real: '31 Mar 2025', status: 'ok',     label: 'Cumplido' },
-  { nombre: 'Entrega Paquete Civil',        plan: '30 Abr 2025', real: '07 May 2025', status: 'warn',   label: 'Atraso 7d' },
-  { nombre: 'Revisión Cliente IFC',         plan: '15 Jun 2025', real: '15 Jun 2025', status: 'ok',     label: 'Cumplido' },
-  { nombre: 'Entrega Paquete Eléctrico',    plan: '31 Jul 2025', real: '—',           status: 'danger', label: 'En riesgo' },
-  { nombre: 'Cierre Ingeniería Detalle',    plan: '31 Dic 2025', real: '—',           status: 'blue',   label: 'En curso' },
+  { nombre: 'Ingeniería Conceptual',       plan: '15 Feb 2025', real: '18 Feb 2025', status: 'warn',   label: 'Leve atraso', obs: '' },
+  { nombre: 'Aprobación Básica Fase 1',    plan: '31 Mar 2025', real: '31 Mar 2025', status: 'ok',     label: 'Cumplido',    obs: '' },
+  { nombre: 'Entrega Paquete Civil',        plan: '30 Abr 2025', real: '07 May 2025', status: 'warn',   label: 'Atraso 7d',   obs: '' },
+  { nombre: 'Revisión Cliente IFC',         plan: '15 Jun 2025', real: '15 Jun 2025', status: 'ok',     label: 'Cumplido',    obs: '' },
+  { nombre: 'Entrega Paquete Eléctrico',    plan: '31 Jul 2025', real: '—',           status: 'danger', label: 'En riesgo',   obs: '' },
+  { nombre: 'Cierre Ingeniería Detalle',    plan: '31 Dic 2025', real: '—',           status: 'blue',   label: 'En curso',    obs: '' },
 ];
 
 const riesgos = [
@@ -721,6 +721,7 @@ hitos.forEach(h => {
       <td style="color:var(--text-muted)">${h.plan}</td>
       <td style="color:var(--text-muted)">${h.real}</td>
       <td><span class="pill ${cls}">${icon} ${h.label}</span></td>
+      <td style="color:var(--text-muted)">${h.obs || '—'}</td>
     </tr>
   `;
 });
