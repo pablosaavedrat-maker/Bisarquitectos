@@ -251,7 +251,7 @@
     .semaforo-status { font-size: 12px; font-weight: 800; letter-spacing: 0.5px; }
 
     /* ── CHARTS ROW ──────────────────────────── */
-    .charts-row { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 16px; }
+    .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
     .card {
       background: var(--surface);
@@ -293,7 +293,7 @@
       margin-bottom: 4px;
       align-items: center;
     }
-    .disc-name { font-size: 11px; font-weight: 600; color: var(--text); }
+    .disc-name { font-size: 10px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
     .disc-meta { font-size: 10px; color: var(--text-muted); display: flex; gap: 10px; }
     .disc-meta .val { font-weight: 700; }
     .disc-meta .real-val { color: var(--bis-teal); }
