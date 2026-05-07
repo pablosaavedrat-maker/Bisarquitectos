@@ -396,7 +396,7 @@
 </head>
 <body>
 
-<!-- ── COLOR BAR ── -->
+<!-- ── COLOR BAR ── --> <!-- v2 -->
 <div class="color-bar">
   <span style="background:var(--bis-teal)"></span>
   <span style="background:var(--bis-green)"></span>
@@ -436,10 +436,6 @@
   <!-- Estado -->
   <div class="header-right">
     <div>
-      <div class="badge badge-warn" id="headerBadge">
-        <div class="dot dot-warn"></div>
-        ATENCIÓN REQUERIDA
-      </div>
       <div style="font-size:10px;color:var(--text-muted);margin-top:6px;text-align:right" id="lastUpdate"></div>
     </div>
   </div>
@@ -612,22 +608,15 @@ function setSemaforo(lvl) {
     if(el) el.classList.remove('active');
   });
   const statusEl = document.getElementById('semaStatus');
-  const badgeEl  = document.getElementById('headerBadge');
   if(lvl === 'rojo'){
     document.getElementById('l-rojo').classList.add('active');
     statusEl.textContent = 'CRÍTICO'; statusEl.style.color = '#DC2626';
-    badgeEl.className = 'badge badge-danger';
-    badgeEl.innerHTML = '<div class="dot dot-danger"></div> SITUACIÓN CRÍTICA';
   } else if(lvl === 'amarillo'){
     document.getElementById('l-amarillo').classList.add('active');
     statusEl.textContent = 'ATENCIÓN'; statusEl.style.color = '#D97706';
-    badgeEl.className = 'badge badge-warn';
-    badgeEl.innerHTML = '<div class="dot dot-warn"></div> ATENCIÓN REQUERIDA';
   } else {
     document.getElementById('l-verde').classList.add('active');
     statusEl.textContent = 'NORMAL'; statusEl.style.color = '#059669';
-    badgeEl.className = 'badge badge-ok';
-    badgeEl.innerHTML = '<div class="dot dot-ok"></div> EN CURSO NORMAL';
   }
 }
 if(diff < -10) setSemaforo('rojo');
