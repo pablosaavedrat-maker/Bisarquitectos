@@ -739,6 +739,24 @@ hitos.forEach(h => {
   `;
 });
 
+/* ── SDI ─────────────────────────────────────── */
+const sdi = [
+  { codigo: 'SDI-001', desc: 'Pendiente de definición', estado: 'blue',   label: 'Pendiente',   responsable: '—' },
+  { codigo: 'SDI-002', desc: 'Pendiente de definición', estado: 'blue',   label: 'Pendiente',   responsable: '—' },
+  { codigo: 'SDI-003', desc: 'Pendiente de definición', estado: 'blue',   label: 'Pendiente',   responsable: '—' },
+];
+sdi.forEach(s => {
+  const [cls, icon] = pillMap[s.estado] || pillMap.blue;
+  document.getElementById('sdi-body').innerHTML += `
+    <tr>
+      <td><strong>${s.codigo}</strong></td>
+      <td>${s.desc}</td>
+      <td><span class="pill ${cls}">${icon} ${s.label}</span></td>
+      <td style="color:var(--text-muted)">${s.responsable}</td>
+    </tr>
+  `;
+});
+
 /* ── RIESGOS ─────────────────────────────────── */
 const impMap = { 'Alto':'pill-danger', 'Medio':'pill-warn', 'Bajo':'pill-blue' };
 riesgos.forEach(r => {
