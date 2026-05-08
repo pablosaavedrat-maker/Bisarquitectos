@@ -616,9 +616,7 @@ function setSemaforo(lvl) {
     statusEl.textContent = 'NORMAL'; statusEl.style.color = '#059669';
   }
 }
-if(diff < -10) setSemaforo('rojo');
-else if(diff < -3) setSemaforo('amarillo');
-else setSemaforo('verde');
+setSemaforo('verde');
 
 /* ── CURVA S ─────────────────────────────────── */
 new Chart(document.getElementById('curvaS').getContext('2d'), {
