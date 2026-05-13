@@ -438,16 +438,16 @@
 
       <div class="kpi-card c-teal">
         <div class="kpi-label">Avance General</div>
-        <div class="kpi-value" style="color:var(--bis-teal)">63%</div>
-        <div class="kpi-sub">Plan: 71% · Desvío: <strong style="color:#DC2626">−8%</strong></div>
-        <div class="kpi-trend trend-down">▼ −2% vs. período anterior</div>
+        <div class="kpi-value" style="color:var(--bis-teal)">0%</div>
+        <div class="kpi-sub">Plan: 2.3% · Desvío: <strong style="color:#D97706">−2.3%</strong></div>
+        <div class="kpi-trend trend-flat">⚠ Inicio de proyecto · Semana 1</div>
       </div>
 
       <div class="kpi-card c-green">
         <div class="kpi-label">Documentos Entregados</div>
-        <div class="kpi-value" style="color:var(--bis-green)">147</div>
-        <div class="kpi-sub">de 234 totales · Pendientes: <strong>87</strong></div>
-        <div class="kpi-trend trend-up">▲ +12 documentos este mes</div>
+        <div class="kpi-value" style="color:var(--bis-green)">0</div>
+        <div class="kpi-sub">de 55 totales · Pendientes: <strong>55</strong></div>
+        <div class="kpi-trend trend-flat">— 0 documentos este mes</div>
       </div>
 
       <div class="kpi-card c-orange">
@@ -607,7 +607,7 @@ document.getElementById('lastUpdate').textContent = 'Actualizado: ' + fmtFull(no
 document.getElementById('footerDate').textContent = 'Generado: ' + fmtFull(now);
 
 /* ── SEMÁFORO ────────────────────────────────── */
-const avReal = 63, avPlan = 71, diff = avReal - avPlan;
+const avReal = 0, avPlan = 2.3, diff = avReal - avPlan;
 function setSemaforo(lvl) {
   ['rojo','amarillo','verde'].forEach(c => {
     const el = document.getElementById('l-'+c);
@@ -625,7 +625,12 @@ function setSemaforo(lvl) {
     statusEl.textContent = 'NORMAL'; statusEl.style.color = '#059669';
   }
 }
-setSemaforo('verde');
+// Semáforo: rojo si real < programado, verde si real >= programado
+if (avReal < avPlan) {
+  setSemaforo('rojo');
+} else {
+  setSemaforo('verde');
+}
 
 /* ── CURVA S ─────────────────────────────────── */
 new Chart(document.getElementById('curvaS').getContext('2d'), {
