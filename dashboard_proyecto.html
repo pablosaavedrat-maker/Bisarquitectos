@@ -283,7 +283,7 @@
       margin-right: 8px;
       vertical-align: middle;
     }
-    .chart-wrap { position: relative; height: 220px; }
+    .chart-wrap { position: relative; height: 266px; }
 
     /* ── DISCIPLINAS ─────────────────────────── */
     .disc-list { display: flex; flex-direction: column; gap: 11px; }
@@ -486,8 +486,8 @@
       <!-- Curva S -->
       <div class="card">
         <div class="card-title">
-          <span><span class="card-title-accent"></span>Curva S — Avance Acumulado</span>
-          <span class="card-title-sub">Real vs. Planificado (%)</span>
+          <span><span class="card-title-accent"></span>Curva S — HH &amp; Avance Acumulado</span>
+          <span class="card-title-sub">HH Semanales (barras) · % Avance Plan (línea)</span>
         </div>
         <div class="chart-wrap">
           <canvas id="curvaS"></canvas>
@@ -517,7 +517,7 @@
         </div>
         <table>
           <thead>
-            <tr><th>Hito</th><th>Fecha Plan</th><th>Fecha Real o Proyectada</th><th>Estado</th><th>Observaciones</th></tr>
+            <tr><th>Hito</th><th>Fecha Plan</th><th>Fecha Real o Proyectada</th><th>Estado</th></tr>
           </thead>
           <tbody id="hitos-body"></tbody>
         </table>
@@ -560,28 +560,37 @@
 </div>
 
 <script>
-/* ── DATA ─────────────────────────────────────── */
+/* ── DATA (fuente: Data1.xlsx) ─────────────────── */
 const curvaSData = {
-  labels: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
-  plan:   [5,12,20,30,42,55,68,78,86,92,97,100],
-  real:   [4,10,18,27,38,51,63,null,null,null,null,null]
+  labels: ['18-may','25-may','01-jun','08-jun','15-jun','22-jun','29-jun',
+           '06-jul','13-jul','20-jul','27-jul','03-ago','10-ago','17-ago',
+           '24-ago','31-ago','07-sep','14-sep','21-sep','28-sep','05-oct'],
+  hhParciales:     [61,107,79,117,135,164,85,108,121,143,142,86,88,86,88,96,140,266,268,268,null],
+  hhAcumuladas:    [61,168,247,364,499,663,748,856,977,1120,1262,1348,1436,1522,1610,1706,1846,2112,2380,2648,null],
+  hhRealParciales: [0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+  hhRealAcumulada: [0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+  plan: [2.3,6.3,9.3,13.7,18.8,25.0,28.2,32.3,36.9,42.3,47.7,50.9,54.2,57.5,60.8,64.4,69.7,79.8,89.9,100.0,null],
+  real: [0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]
 };
 
 const disciplinas = [
-  { name: 'Actividades Preliminares',                real: 72, plan: 80, estado: 'warn' },
-  { name: 'Anteproyecto de Arquitectura',            real: 60, plan: 70, estado: 'warn' },
-  { name: 'Revisión Independiente de Arquitectura',  real: 55, plan: 75, estado: 'bad'  },
-  { name: 'Proyecto Paisajismo',                     real: 78, plan: 80, estado: 'ok'   },
-  { name: 'Proyecto de Señalética',                  real: 65, plan: 65, estado: 'ok'   },
-  { name: 'Expediente Definitivo Construcción',      real: 50, plan: 60, estado: 'warn' },
+  { name: 'Actividades Preliminares',                real:  0, plan:  0, estado: 'ok' },
+  { name: 'Anteproyecto de Arquitectura',            real:  0, plan:  0, estado: 'ok' },
+  { name: 'Proyecto de Arquitectura',                real:  0, plan:  0, estado: 'ok' },
+  { name: 'Revisión Independiente de Arquitectura',  real:  0, plan:  0, estado: 'ok' },
+  { name: 'Proyecto Paisajismo',                     real:  0, plan:  0, estado: 'ok' },
+  { name: 'Proyecto de Señalética',                  real:  0, plan:  0, estado: 'ok' },
+  { name: 'Expediente Definitivo Construcción',      real:  0, plan:  0, estado: 'ok' },
 ];
 
 const hitos = [
-  { nombre: 'Ingeniería Conceptual',       plan: '15 Feb 2026', real: '18 Feb 2026', status: 'warn',   label: 'Leve atraso', obs: '' },
-  { nombre: 'Aprobación Básica Fase 1',    plan: '31 Mar 2026', real: '31 Mar 2026', status: 'ok',     label: 'Cumplido',    obs: '' },
-  { nombre: 'Entrega Paquete Civil',        plan: '30 Abr 2026', real: '07 May 2026', status: 'warn',   label: 'Atraso 7d',   obs: '' },
-  { nombre: 'Revisión Cliente IFC',         plan: '15 Jun 2026', real: '15 Jun 2026', status: 'ok',     label: 'Cumplido',    obs: '' },
-  { nombre: 'Entrega Paquete Eléctrico',    plan: '31 Jul 2026', real: '—',           status: 'danger', label: 'En riesgo',   obs: '' },
+  { nombre: 'Hito de Inicio de Servicio',                                                                          plan: '07-May-26', real: '07-May-26', status: 'ok', label: 'Cumplido', obs: '' },
+  { nombre: 'Hito Recepción Info: Programa de Recintos con Superficies y condiciones de proyecto',                 plan: '18-May-26', real: '—', status: 'ok',     label: 'Pendiente', obs: '' },
+  { nombre: 'Hito Recepción Info: Identificación propuesta inicial',                                               plan: '18-May-26', real: '—', status: 'ok',     label: 'Pendiente', obs: '' },
+  { nombre: 'Hito Recepción Info: Ant. predio de CMZ (CIP, Cert. Número, Cert. Ruralidad, Avalúo Detallado)',      plan: '18-May-26', real: '—', status: 'ok',     label: 'Pendiente', obs: '' },
+  { nombre: 'Hito Recepción Info: Lev. Topográfico',                                                              plan: '18-May-26', real: '—', status: 'ok',     label: 'Pendiente', obs: '' },
+  { nombre: 'Hito Recepción Info: Informe Mecánica de Suelo de CMZ',                                              plan: '18-May-26', real: '—', status: 'ok',     label: 'Pendiente', obs: '' },
+  { nombre: 'Hito Recepción Info: Factibilidad de Instalaciones de CMZ (eléctrica, agua potable, alcantarillado)', plan: '18-May-26', real: '—', status: 'ok',     label: 'Pendiente', obs: '' },
 ];
 
 const riesgos = [
@@ -620,23 +629,49 @@ setSemaforo('verde');
 
 /* ── CURVA S ─────────────────────────────────── */
 new Chart(document.getElementById('curvaS').getContext('2d'), {
-  type: 'line',
+  type: 'bar',
   data: {
     labels: curvaSData.labels,
     datasets: [
       {
-        label: 'Plan',
+        label: 'HH Programadas (semanal)',
+        type: 'bar',
+        data: curvaSData.hhParciales,
+        backgroundColor: 'rgba(141,196,64,0.45)',
+        borderColor: '#8DC440',
+        borderWidth: 1,
+        borderRadius: 3,
+        yAxisID: 'yHH',
+        order: 3,
+      },
+      {
+        label: 'HH Real (semanal)',
+        type: 'bar',
+        data: curvaSData.hhRealParciales,
+        backgroundColor: 'rgba(27,158,199,0.55)',
+        borderColor: '#1B9EC7',
+        borderWidth: 1,
+        borderRadius: 3,
+        yAxisID: 'yHH',
+        order: 2,
+      },
+      {
+        label: '% Avance Plan',
+        type: 'line',
         data: curvaSData.plan,
         borderColor: '#E05419',
-        borderWidth: 2,
+        borderWidth: 2.5,
         borderDash: [6,4],
         pointBackgroundColor: '#E05419',
         pointRadius: 3,
         tension: 0.4,
         fill: false,
+        yAxisID: 'yPct',
+        order: 1,
       },
       {
-        label: 'Real',
+        label: '% Avance Real',
+        type: 'line',
         data: curvaSData.real,
         borderColor: '#1B9EC7',
         borderWidth: 2.5,
@@ -644,16 +679,19 @@ new Chart(document.getElementById('curvaS').getContext('2d'), {
         pointBackgroundColor: '#1B9EC7',
         pointRadius: 4,
         tension: 0.4,
-        fill: true,
+        fill: false,
+        yAxisID: 'yPct',
+        order: 0,
       },
     ]
   },
   options: {
     responsive: true,
     maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
     plugins: {
       legend: {
-        labels: { color: '#6B7280', font: { size: 11, family: 'Inter' }, boxWidth: 18, padding: 14 }
+        labels: { color: '#6B7280', font: { size: 10, family: 'Inter' }, boxWidth: 14, padding: 10 }
       },
       tooltip: {
         backgroundColor: '#FFFFFF',
@@ -662,21 +700,34 @@ new Chart(document.getElementById('curvaS').getContext('2d'), {
         titleColor: '#1A1D23',
         bodyColor: '#6B7280',
         padding: 10,
-        boxShadow: '0 4px 12px rgba(0,0,0,.1)',
         callbacks: {
-          label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y !== null ? ctx.parsed.y+'%' : 'Sin dato'}`
+          label: ctx => {
+            if (ctx.parsed.y === null) return null;
+            if (ctx.dataset.yAxisID === 'yHH') return ` ${ctx.dataset.label}: ${ctx.parsed.y} HH`;
+            return ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}%`;
+          }
         }
       }
     },
     scales: {
       x: {
-        ticks: { color: '#6B7280', font: { size: 10, family: 'Inter' } },
+        ticks: { color: '#6B7280', font: { size: 9, family: 'Inter' }, maxRotation: 45 },
+        grid:  { color: 'rgba(226,230,234,0.5)' },
+      },
+      yHH: {
+        type: 'linear',
+        position: 'left',
+        title: { display: true, text: 'HH / semana', color: '#6B7280', font: { size: 9, family: 'Inter' } },
+        ticks: { color: '#6B7280', font: { size: 9, family: 'Inter' } },
         grid:  { color: 'rgba(226,230,234,0.8)' },
       },
-      y: {
+      yPct: {
+        type: 'linear',
+        position: 'right',
         min: 0, max: 100,
-        ticks: { color: '#6B7280', font: { size: 10, family: 'Inter' }, callback: v => v+'%' },
-        grid:  { color: 'rgba(226,230,234,0.8)' },
+        title: { display: true, text: '% Avance', color: '#6B7280', font: { size: 9, family: 'Inter' } },
+        ticks: { color: '#6B7280', font: { size: 9, family: 'Inter' }, callback: v => v+'%' },
+        grid:  { drawOnChartArea: false },
       }
     }
   }
@@ -709,15 +760,18 @@ disciplinas.forEach(d => {
 
 /* ── HITOS ───────────────────────────────────── */
 const pillMap = { ok:['pill-ok','✓'], warn:['pill-warn','⚠'], danger:['pill-danger','✗'], blue:['pill-blue','→'] };
-hitos.forEach(h => {
+hitos.forEach((h, i) => {
   const [cls, icon] = pillMap[h.status] || pillMap.blue;
   document.getElementById('hitos-body').innerHTML += `
     <tr>
       <td><strong>${h.nombre}</strong></td>
-      <td style="color:var(--text-muted)">${h.plan}</td>
+      <td><input type="text" id="plan-${i}" value="${h.plan}"
+            style="border:1px solid var(--border);border-radius:5px;padding:3px 7px;
+                   font-size:11px;font-family:Inter,sans-serif;color:var(--text);
+                   background:var(--surface2);width:100px;text-align:center;cursor:text;"
+            onchange="hitos[${i}].plan=this.value"/></td>
       <td style="color:var(--text-muted)">${h.real}</td>
       <td><span class="pill ${cls}">${icon} ${h.label}</span></td>
-      <td style="color:var(--text-muted)">${h.obs || '—'}</td>
     </tr>
   `;
 });
