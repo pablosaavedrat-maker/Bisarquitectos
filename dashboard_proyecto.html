@@ -562,14 +562,14 @@
 <script>
 /* ── DATA (fuente: Data1.xlsx) ─────────────────── */
 const curvaSData = {
-  labels: ['18-may','25-may','01-jun','08-jun','15-jun','22-jun','29-jun',
-           '06-jul','13-jul','20-jul','27-jul','03-ago','10-ago','17-ago',
-           '24-ago','31-ago','07-sep','14-sep','21-sep','28-sep','05-oct'],
-  hhParciales:     [61,107,79,117,135,164,85,108,121,143,142,86,88,86,88,96,140,266,268,268,null],
-  hhAcumuladas:    [61,168,247,364,499,663,748,856,977,1120,1262,1348,1436,1522,1610,1706,1846,2112,2380,2648,null],
+  labels: ['13-may','20-may','27-may','03-jun','10-jun','17-jun','24-jun',
+           '01-jul','08-jul','15-jul','22-jul','29-jul','05-ago','12-ago',
+           '19-ago','26-ago','02-sep','09-sep','16-sep','23-sep','30-sep'],
+  hhParciales:     [84,102,69,99,133,143,151,91,115,121,55,120,86,98,177,265,225,173,159,162,26],
+  hhAcumuladas:    [84,186,255,354,487,630,781,872,987,1108,1263,1383,1469,1557,1734,1999,2224,2397,2556,2718,2744],
   hhRealParciales: [0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
   hhRealAcumulada: [0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-  plan: [2.3,6.3,9.3,13.7,18.8,25.0,28.2,32.3,36.9,42.3,47.7,50.9,54.2,57.5,60.8,64.4,69.7,79.8,89.9,100.0,null],
+  plan: [3.1,6.8,9.3,12.9,17.7,23.0,28.5,31.8,36.0,40.4,46.0,50.4,53.5,56.7,63.2,72.8,81.0,87.4,93.1,99.1,100.0],
   real: [0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]
 };
 
@@ -607,7 +607,7 @@ document.getElementById('lastUpdate').textContent = 'Actualizado: ' + fmtFull(no
 document.getElementById('footerDate').textContent = 'Generado: ' + fmtFull(now);
 
 /* ── SEMÁFORO ────────────────────────────────── */
-const avReal = 0, avPlan = 2.3, diff = avReal - avPlan;
+const avReal = 0, avPlan = 3.1, diff = avReal - avPlan;
 function setSemaforo(lvl) {
   ['rojo','amarillo','verde'].forEach(c => {
     const el = document.getElementById('l-'+c);
