@@ -831,7 +831,7 @@ hitos.forEach((h, i) => {
   const [cls, icon] = pillMap[h.status] || pillMap.blue;
   document.getElementById('hitos-body').innerHTML += `
     <tr>
-      <td><strong>${h.nombre}</strong></td>
+      <td>${h.nombre}</td>
       <td><input type="text" id="plan-${i}" value="${h.plan}"
             style="border:1px solid var(--border);border-radius:5px;padding:3px 7px;
                    font-size:11px;font-family:Inter,sans-serif;color:var(--text);
