@@ -618,14 +618,15 @@ const curvaSData = {
 };
 
 const disciplinas = [
-  { name: 'Actividades Preliminares',                real:  0, plan:  0, estado: 'ok' },
-  { name: 'Anteproyecto de Arquitectura',            real:  0, plan:  0, estado: 'ok' },
-  { name: 'Proyecto de Arquitectura',                real:  0, plan:  0, estado: 'ok' },
-  { name: 'Revisión Independiente de Arquitectura',  real:  0, plan:  0, estado: 'ok' },
-  { name: 'Proyecto Paisajismo',                     real:  0, plan:  0, estado: 'ok' },
-  { name: 'Proyecto de Señalética',                  real:  0, plan:  0, estado: 'ok' },
-  { name: 'Expediente Definitivo Construcción',      real:  0, plan:  0, estado: 'ok' },
+  { name: 'Actividades Preliminares',                real:  0, plan:  0, estado: 'ok', gs:  0, ge: 10 },
+  { name: 'Anteproyecto de Arquitectura',            real:  0, plan:  0, estado: 'ok', gs:  0, ge: 30 },
+  { name: 'Proyecto de Arquitectura',                real:  0, plan:  0, estado: 'ok', gs: 20, ge: 65 },
+  { name: 'Revisión Independiente de Arquitectura',  real:  0, plan:  0, estado: 'ok', gs: 50, ge: 75 },
+  { name: 'Proyecto Paisajismo',                     real:  0, plan:  0, estado: 'ok', gs: 30, ge: 90 },
+  { name: 'Proyecto de Señalética',                  real:  0, plan:  0, estado: 'ok', gs: 50, ge: 90 },
+  { name: 'Expediente Definitivo Construcción',      real:  0, plan:  0, estado: 'ok', gs: 75, ge:100 },
 ];
+// gs/ge = posición % en el timeline del proyecto (May 13=0% → Sep 30=100%)
 
 const hitos = [
   { nombre: 'Hito de Inicio de Servicio',                                                                          plan: '07-May-26', real: '07-May-26', status: 'ok', label: 'Cumplido', obs: '' },
@@ -784,11 +785,28 @@ new Chart(document.getElementById('curvaS').getContext('2d'), {
 
 /* ── DISCIPLINAS ─────────────────────────────── */
 const discContainer = document.getElementById('disciplinas');
-const fillClass = { ok:'fill-ok', warn:'fill-warn', bad:'fill-bad' };
+// Timeline: May 13=0% → Sep 30=100% (140 días). Ticks de meses:
+const ganttMonths = [
+  { label:'May', pct: 0 },
+  { label:'Jun', pct: 13.6 },
+  { label:'Jul', pct: 35.0 },
+  { label:'Ago', pct: 57.1 },
+  { label:'Sep', pct: 79.3 },
+];
+const GANTT_TODAY = 0; // Hoy = 13-may = inicio del proyecto
+let ganttHeader = '<div class="gantt-header">';
+ganttMonths.forEach(m => {
+  ganttHeader += `<span class="gantt-month-tick" style="left:${m.pct}%">${m.label}</span>`;
+});
+ganttHeader += '</div>';
+discContainer.innerHTML += ganttHeader;
+
 disciplinas.forEach(d => {
   const dif = d.real - d.plan;
   const difSign = dif >= 0 ? '+' : '';
   const difClass = dif >= 0 ? 'diff-ok' : (dif >= -10 ? 'diff-warn' : 'diff-bad');
+  const planW = d.ge - d.gs;
+  const realW = planW * (d.real / 100);
   discContainer.innerHTML += `
     <div>
       <div class="disc-header">
@@ -799,9 +817,10 @@ disciplinas.forEach(d => {
           <span class="${difClass}" style="font-weight:700">${difSign}${dif}%</span>
         </span>
       </div>
-      <div class="progress-track">
-        <div class="progress-fill ${fillClass[d.estado]}" style="width:${d.real}%"></div>
-        <div class="plan-marker" style="left:${d.plan}%"></div>
+      <div class="gantt-track">
+        <div class="gantt-plan" style="left:${d.gs}%;width:${planW}%"></div>
+        <div class="gantt-real" style="left:${d.gs}%;width:${realW}%"></div>
+        <div class="gantt-today-line" style="left:${GANTT_TODAY}%"></div>
       </div>
     </div>
   `;
