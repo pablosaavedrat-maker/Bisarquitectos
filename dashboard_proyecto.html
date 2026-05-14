@@ -832,13 +832,13 @@ hitos.forEach((h, i) => {
   document.getElementById('hitos-body').innerHTML += `
     <tr>
       <td>${h.nombre}</td>
-      <td><input type="text" id="plan-${i}" value="${h.plan}"
+      <td style="text-align:center"><input type="text" id="plan-${i}" value="${h.plan}"
             style="border:1px solid var(--border);border-radius:5px;padding:3px 7px;
                    font-size:11px;font-family:Inter,sans-serif;color:var(--text);
                    background:var(--surface2);width:100px;text-align:center;cursor:text;"
             onchange="hitos[${i}].plan=this.value"/></td>
-      <td style="color:var(--text-muted)">${h.real}</td>
-      <td><span class="pill ${cls}">${icon} ${h.label}</span></td>
+      <td style="text-align:center;color:var(--text-muted)">${h.real}</td>
+      <td style="text-align:center"><span class="pill ${cls}">${icon} ${h.label}</span></td>
     </tr>
   `;
 });
