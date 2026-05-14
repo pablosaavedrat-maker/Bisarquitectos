@@ -466,7 +466,6 @@
   <!-- Estado -->
   <div class="header-right">
     <div>
-      <div style="font-size:10px;color:var(--text-muted);margin-top:6px;text-align:right" id="lastUpdate"></div>
     </div>
   </div>
 
@@ -647,7 +646,6 @@ const riesgos = [
 /* ── DATES ───────────────────────────────────── */
 const now = new Date();
 const fmtFull = d => d.toLocaleDateString('es-CL',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
-document.getElementById('lastUpdate').textContent = 'Actualizado: ' + fmtFull(now);
 document.getElementById('footerDate').textContent = 'Generado: ' + fmtFull(now);
 
 /* ── SEMÁFORO ────────────────────────────────── */
